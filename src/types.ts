@@ -6,8 +6,13 @@ export interface Result<T> {
     error?: unknown;
 }
 export type GetCampaignsParams = {
-    page?: number;
+    offset?: number;
     limit?: number;
+    version?: "v2";
+    page?: number;
+    sortby?: "createdAt"
+    sortOrder?: "asc" | "desc";
+    status?: "running" | "draft" | "archived" | "paused" | "ended" | "errors";
 }
 
 export const campaignSchema = v.object({
@@ -42,4 +47,24 @@ export const minimalCampaignsSchema = v.array(minimalCampaignSchema);
 
 export type MinimalCampaign = v.InferOutput<typeof minimalCampaignSchema>;
 
+export const updateCampaignDataSchema = v.object({
+    name: v.optional(v.string()),
+    stopOnEmailReplied: v.optional(v.boolean()),
+    stopOnMeetingBooked: v.optional(v.boolean()),
+    stopOnLinkClicked: v.optional(v.boolean()),
+    leadsPausedByInterest: v.optional(v.boolean()),
+    opportunityReplied: v.optional(v.boolean()),
+    opportunityClicked: v.optional(v.boolean()),
+    autoLeadInterest: v.optional(v.boolean()),
+    disableTrackOpen: v.optional(v.boolean()),
+    disableTrackClick: v.optional(v.boolean()),
+    disableTrackReply: v.optional(v.boolean()),
+    stopOnLinkClickedFilter: v.optional(v.string()),
+});
 
+export const pauseCampaignDataSchema = v.object({
+    _id: v.string(),
+    state: v.string(),
+});
+
+export type UpdateCampaignData = v.InferOutput<typeof updateCampaignDataSchema>;

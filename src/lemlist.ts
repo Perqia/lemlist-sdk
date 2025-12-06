@@ -1,4 +1,4 @@
-import { minimalCampaignsSchema, campaignSchema, Result, GetCampaignsParams } from "./types";
+import { minimalCampaignsSchema, campaignSchema, Result, GetCampaignsParams, UpdateCampaignData, updateCampaignDataSchema, pauseCampaignDataSchema } from "./types";
 import * as v from 'valibot';
  
 interface LemListAPIOptions {
@@ -46,7 +46,6 @@ export class LemListAPI {
             const parsedData = v.parse(options.schema, data);
             result.success = true;
             result.data = parsedData;
-            result.success = true;
         } catch (error) {
             result.error = error;
         } finally {
@@ -55,10 +54,38 @@ export class LemListAPI {
     }
 
     public getCampaigns(params?: GetCampaignsParams) {
-        return this.request("GET", "/campaigns", { schema: minimalCampaignsSchema });
+        let uri = "/campaigns";
+        if (params) {
+            const queryParams = new URLSearchParams();
+            if (params.offset) queryParams.set("offset", params.offset.toString());
+            if (params.limit) queryParams.set("limit", params.limit.toString());
+            if (params.version) queryParams.set("version", params.version);
+            if (params.page) queryParams.set("page", params.page.toString());
+            if (params.sortby) queryParams.set("sortby", params.sortby);
+            if (params.sortOrder) queryParams.set("sortOrder", params.sortOrder);
+            if (params.status) queryParams.set("status", params.status);
+            uri += `?${queryParams.toString()}`;
+        }
+        return this.request("GET", uri, { schema: minimalCampaignsSchema });
     }
 
     public getCampaign(campaignId: string) {
         return this.request("GET", `/campaigns/${campaignId}`, { schema: campaignSchema });
     }
+
+    public updateCampaign(campaignId: string, data: UpdateCampaignData) {
+        return this.request("PATCH", `/campaigns/${campaignId}`, { schema: updateCampaignDataSchema, body: data });
+    }
+
+    public pauseCampaign(campaignId: string) {
+        return this.request("POST", `/campaigns/${campaignId}/pause`, { schema: pauseCampaignDataSchema });
+    }
+
+    // public resumeCampaign(campaignId: string) {
+    //     return this.request("POST", `/campaigns/${campaignId}/resume`, { schema: campaignSchema });
+    // }
+
+    // public deleteCampaign(campaignId: string) {
+    //     return this.request("DELETE", `/campaigns/${campaignId}`, { schema: campaignSchema });
+    // }
 }
