@@ -7,6 +7,7 @@ jobs:
     version-and-publish:
         runs-on: ubuntu-latest
         permissions:
+            id-token: write  # Required for OIDC in npm registry
             contents: write
             packages: read
         steps:
