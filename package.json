@@ -6,6 +6,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "npm run clean && tsc",
+    "publish-packages": "npm run build && changeset version && changeset publish",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "John Thomas Shaw Valanidas",
