@@ -1,5 +1,5 @@
 {
-  "name": "@perqia/lemlist-sdk",
+  "name": "lemlist-sdk",
   "version": "0.0.3",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Perqia/lemlist-sdk.git"
+    "url": "git+https://github.com/JohnValanidas/lemlist-sdk.git"
   },
   "keywords": [
     "api",
@@ -32,7 +32,7 @@
     "lemlist"
   ],
   "bugs": {
-    "url": "https://github.com/Perqia/lemlist-sdk/issues"
+    "url": "https://github.com/JohnValanidas/lemlist-sdk/issues"
   },
-  "homepage": "https://github.com/Perqia/lemlist-sdk#readme"
+  "homepage": "https://github.com/JohnValanidas/lemlist-sdk#readme"
 }
