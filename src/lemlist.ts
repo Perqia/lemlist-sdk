@@ -35,6 +35,15 @@ import {
     PauseCampaignData,
     Campaign,
     MinimalCampaign,
+    Webhook,
+    webhooksSchema,
+    webhookSchema,
+    CreateWebhookRequest,
+    CreateWebhookParams,
+    CreateWebhookResponse,
+    createWebhookResponseSchema,
+    DeleteWebhookResponse,
+    deleteWebhookResponseSchema,
 } from "./types";
 import * as v from 'valibot';
  
@@ -296,6 +305,55 @@ export class LemListAPI {
      */
     public getUser(userId: string): Promise<Result<User>> {
         return this.request("GET", `/users/${userId}`, { schema: userSchema });
+    }
+
+    // ===========================
+    // Webhook Methods
+    // ===========================
+
+    /**
+     * Retrieves all webhooks configured for your team.
+     *
+     * @returns Array of webhook configurations wrapped in a Result type
+     * @see https://developer.lemlist.com/api-reference/endpoints/webhooks/get-many-webhooks
+     */
+    public getWebhooks(): Promise<Result<Webhook[]>> {
+        return this.request("GET", "/hooks", { schema: webhooksSchema });
+    }
+
+    /**
+     * Creates a webhook that receives real-time POST callbacks for selected events.
+     *
+     * @param data - The webhook configuration containing the target URL and optional event type
+     * @param params - Optional query parameters including campaignId, isFirst, and zapId
+     * @returns Created webhook information wrapped in a Result type
+     * @see https://developer.lemlist.com/api-reference/endpoints/webhooks/add-webhook
+     */
+    public createWebhook(
+        data: CreateWebhookRequest,
+        params?: CreateWebhookParams
+    ): Promise<Result<CreateWebhookResponse>> {
+        let uri = "/hooks";
+        if (params) {
+            const queryParams = new URLSearchParams();
+            if (params.campaignId) queryParams.set("campaignId", params.campaignId);
+            if (params.isFirst !== undefined) queryParams.set("isFirst", params.isFirst.toString());
+            if (params.zapId) queryParams.set("zapId", params.zapId);
+            const queryString = queryParams.toString();
+            if (queryString) uri += `?${queryString}`;
+        }
+        return this.request("POST", uri, { schema: createWebhookResponseSchema, body: data });
+    }
+
+    /**
+     * Deletes a specific webhook.
+     *
+     * @param hookId - The unique identifier of the webhook to delete
+     * @returns Deletion confirmation wrapped in a Result type
+     * @see https://developer.lemlist.com/api-reference/endpoints/webhooks/delete-webhook
+     */
+    public deleteWebhook(hookId: string): Promise<Result<DeleteWebhookResponse>> {
+        return this.request("DELETE", `/hooks/${hookId}`, { schema: deleteWebhookResponseSchema });
     }
 
 }
