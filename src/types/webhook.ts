@@ -8,7 +8,6 @@ import * as v from 'valibot';
  * Webhook event types that can be subscribed to
  */
 export const webhookEventTypeSchema = v.picklist([
-    // Activity events
     'contacted',
     'hooked',
     'attracted',
@@ -16,7 +15,6 @@ export const webhookEventTypeSchema = v.picklist([
     'interested',
     'skipped',
     'notInterested',
-    // Email events
     'emailsSent',
     'emailsOpened',
     'emailsClicked',
@@ -27,13 +25,11 @@ export const webhookEventTypeSchema = v.picklist([
     'emailsUnsubscribed',
     'emailsInterested',
     'emailsNotInterested',
-    // LinkedIn events
     'linkedinInterested',
     'linkedinNotInterested',
     'linkedinSent',
     'linkedinReplied',
     'linkedinInviteAccepted',
-    // Operational alerts
     'customDomainErrors',
     'connectionIssue',
     'sendLimitReached',

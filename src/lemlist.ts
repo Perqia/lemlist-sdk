@@ -44,6 +44,11 @@ import {
     createWebhookResponseSchema,
     DeleteWebhookResponse,
     deleteWebhookResponseSchema,
+    GetLeadParams,
+    Lead,
+    leadSchema,
+    PausedLeads,
+    pausedLeadsSchema,
 } from "./types";
 import * as v from 'valibot';
  
@@ -356,4 +361,45 @@ export class LemListAPI {
         return this.request("DELETE", `/hooks/${hookId}`, { schema: deleteWebhookResponseSchema });
     }
 
+
+    // ===========================
+    // Lead Methods
+    // ===========================
+
+    /**
+     * Retrieves information about a specific lead by email or ID.
+     *
+     * @param params - Query parameters containing either email or id (or both), and version
+     * @returns Lead information wrapped in a Result type
+     * @see https://developer.lemlist.com/api-reference/endpoints/leads/get-lead-by-email-or-id
+     */
+    public getLead(params: GetLeadParams): Promise<Result<Lead>> {
+        const queryParams = new URLSearchParams();
+        if ("email" in params) {
+            queryParams.set("email", params.email)
+        }
+        if ("id" in params) {
+            queryParams.set("id", params.id)
+        }
+        queryParams.set("version", "v2");
+        return this.request("GET", `/leads?${queryParams.toString()}`, { schema: leadSchema });
+    }
+
+    /**
+     * Pauses a lead's activity either globally or within a specific campaign.
+     *
+     * @param leadId - The unique identifier of the lead to pause
+     * @param campaignId - Optional campaign ID to pause the lead only in that campaign
+     * @returns Array of paused lead information wrapped in a Result type
+     * @see https://developer.lemlist.com/api-reference/endpoints/leads/pause-lead
+     */
+    public pauseLead(leadId: string, campaignId?: string): Promise<Result<PausedLeads>> {
+        let uri = `/leads/pause/${leadId}`;
+        if (campaignId) {
+            const queryParams = new URLSearchParams();
+            queryParams.set("campaignId", campaignId);
+            uri += `?${queryParams.toString()}`;
+        }
+        return this.request("POST", uri, { schema: pausedLeadsSchema });
+    }
 }

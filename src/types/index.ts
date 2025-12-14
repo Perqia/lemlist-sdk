@@ -4,3 +4,4 @@ export * from './team';
 export * from './user';
 export * from './utils';
 export * from './webhook';
+export * from './leads';
