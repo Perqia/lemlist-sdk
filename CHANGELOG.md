@@ -1,5 +1,11 @@
 # @perqia/lemlist-sdk
 
+## 0.0.7
+
+### Patch Changes
+
+- 160cdb6: remove log statement
+
 ## 0.0.6
 
 ### Patch Changes
