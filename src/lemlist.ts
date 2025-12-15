@@ -92,7 +92,13 @@ export class LemListAPI {
         
         try {
             const response = await fetch(`${this.options.baseUrl}${path}`, fetchOptions);
+            // TODO: Create error for specfic errors.
+            // if (response.status >= 400) {
+            //     throw new Error(`Failed to complete request. Error code: ${response.status}`)
+            // }
             const data = await response.json();
+            // TODO: differenciate between parse error
+            console.log(data)
             const parsedData = v.parse(options.schema, data);
             result.success = true;
             result.data = parsedData;
@@ -369,17 +375,16 @@ export class LemListAPI {
     /**
      * Retrieves information about a specific lead by email or ID.
      *
-     * @param params - Query parameters containing either email or id (or both), and version
-     * @returns Lead information wrapped in a Result type
+     * @param params - Query parameters containing either email or id (not both)
+     * @returns Array of lead information wrapped in a Result type
      * @see https://developer.lemlist.com/api-reference/endpoints/leads/get-lead-by-email-or-id
      */
     public getLead(params: GetLeadParams): Promise<Result<Lead>> {
         const queryParams = new URLSearchParams();
         if ("email" in params) {
-            queryParams.set("email", params.email)
-        }
-        if ("id" in params) {
-            queryParams.set("id", params.id)
+            queryParams.set("email", params.email);
+        } else {
+            queryParams.set("id", params.id);
         }
         queryParams.set("version", "v2");
         return this.request("GET", `/leads?${queryParams.toString()}`, { schema: leadSchema });
