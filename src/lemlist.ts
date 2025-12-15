@@ -98,7 +98,6 @@ export class LemListAPI {
             // }
             const data = await response.json();
             // TODO: differenciate between parse error
-            console.log(data)
             const parsedData = v.parse(options.schema, data);
             result.success = true;
             result.data = parsedData;
