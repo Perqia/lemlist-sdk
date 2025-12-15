@@ -1,5 +1,11 @@
 # @perqia/lemlist-sdk
 
+## 0.0.6
+
+### Patch Changes
+
+- 64599a1: Add fetch and pause lead fucntions
+
 ## 0.0.5
 
 ### Patch Changes
