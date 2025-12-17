@@ -1,5 +1,11 @@
 # @perqia/lemlist-sdk
 
+## 0.0.8
+
+### Patch Changes
+
+- fb4820a: remove unused imports
+
 ## 0.0.7
 
 ### Patch Changes
